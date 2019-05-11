@@ -4,11 +4,9 @@ package me.cordova;
 import me.cordova.model.Item;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,25 +18,11 @@ public class App {
 
         Elements main = doc.select(".main");
 
-        List<Item> items = new ArrayList<>();
-
-
- /*       main.select(".product-item__info").forEach(System.out::println);
-
-        main.select(".product-item__info").forEach(
-                element -> {
-                    Elements hrefs = element.getElementsByAttribute("href");
-                    System.out.println("title: " + hrefs.attr("title"));
-                    System.out.println("url: " + hrefs.attr("href"));
-                }
-        );
-
-        items = main.select(".product-item__info").stream()
-                .map(i -> new Item(i.attr("title"), i.attr("a href")))
-                .collect(Collectors.toList());*/
+        List<Item> items;
 
         Elements itemNodes = main.select(".product-item__info");
-        System.out.println("itemNodes ===================================================");
+
+/*      System.out.println("itemNodes ===================================================");
         System.out.println(itemNodes.outerHtml());
 
         itemNodes.forEach(
@@ -50,7 +34,7 @@ public class App {
                     //System.out.println(element.children());
                     System.out.println(element.getElementsByAttribute("href"));
                 }
-        );
+        );*/
 
         items = itemNodes.stream()
                 .map(element ->
@@ -60,7 +44,10 @@ public class App {
                 .collect(Collectors.toList());
 
         System.out.println("===================================================");
-
+        System.out.println("========== Found items ============================");
+        System.out.println("===================================================");
+        System.out.println(items);
+        System.out.println("===================================================");
 
     }
 }
