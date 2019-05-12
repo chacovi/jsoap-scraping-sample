@@ -36,6 +36,8 @@ public class App {
                 .collect(Collectors.toList());
 
         System.out.println("===================================================");
+        System.out.println("Scraping to >>> " + document.baseUri());
+        System.out.println("===================================================");
         System.out.println("========== #1 Found " + items.size() + " items ====");
         System.out.println("===================================================");
         System.out.println("========== #2 Found details for each items ========");
