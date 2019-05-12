@@ -1,5 +1,6 @@
 package me.cordova;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.cordova.model.Brand;
 import me.cordova.model.Item;
 import me.cordova.model.Product;
@@ -77,8 +78,12 @@ public class App {
 
         }
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productsJson = objectMapper.writeValueAsString(products);
+
+
         System.out.println("===================================================");
-        System.out.println(products.toString());
+        System.out.println(productsJson);
         System.out.println("===================================================");
 
     }
