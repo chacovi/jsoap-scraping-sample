@@ -1,14 +1,12 @@
 package me.cordova;
 
-
 import me.cordova.model.Brand;
 import me.cordova.model.Item;
 import me.cordova.model.Product;
-import me.cordova.model.Product.ProductBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,19 +16,18 @@ import java.util.stream.Collectors;
 public class App {
 
     private static Document document;
-    private static Elements elements;
-    private static Element element;
 
     public static void main(String[] args) throws IOException {
 
+        //document = Jsoup.connect("https://www.metro.pe/frutas-y-verduras").get();
+        //document = Jsoup.connect("https://www.metro.pe/lacteos-y-huevos").get();
         //document = Jsoup.connect("https://www.metro.pe/abarrotes").get();
-        document = Jsoup.connect("https://www.metro.pe/bebidas").get();
+        //document = Jsoup.connect("https://www.metro.pe/bebidas").get();
+        document = Jsoup.connect("https://www.metro.pe/vinos-y-licores").get();
 
         List<Item> items;
 
-        elements = document.select(".product-item__info");
-
-        items = elements.stream()
+        items = document.select(".product-item__info").stream()
                 .map(element ->
                         new Item(
                                 element.getElementsByAttribute("href").attr("title"),
@@ -42,26 +39,45 @@ public class App {
         System.out.println("===================================================");
         System.out.println(items);
         System.out.println("===================================================");
-        System.out.println("========== #2 Found Details for each items ========");
+        System.out.println("========== #2 Found details for each items ========");
         System.out.println("===================================================");
 
         List<Product> products = new ArrayList<>();
 
-        Integer i = 0;
+        Integer i = 1;
 
-        for (Item item: items){
+        for (Item item : items) {
 
             String url = item.getUrl();
 
-            document = Jsoup.connect(url).get();
+            try {
+                document = Jsoup.connect(url).get();
+            }catch (IOException ex){
+                System.out.println(ex.getMessage());
+            }
 
             System.out.println("===================================================");
-            System.out.println( "========== P " + i++ + " " + document.title());
+            System.out.println("========== P " + i++ + " " + document.title());
             System.out.println("===================================================");
+
+            System.out.println("Product name ====================================================");
+            System.out.println(getProductName());
+            System.out.println("Product brand ===================================================");
+            System.out.println(getProductBrand().getName());
+            System.out.println("Product description =============================================");
+            System.out.println(getProductDescription());
+            System.out.println("Product price ===================================================");
+            System.out.println(getProductPrice());
+            System.out.println("Product imageUrl ===================================================");
+            System.out.println(getProductImageUrl());
+            System.out.println("Product Stock ===================================================");
+            System.out.println(getProductStock());
 
             products.add(createProduct());
 
         }
+
+        System.out.println("===================================================");
         System.out.println(products.toString());
         System.out.println("===================================================");
 
@@ -69,33 +85,50 @@ public class App {
 
     private static Product createProduct() {
 
-        elements = document.select(".info-wrapper");
-
-        String name = elements.select(".name").first().text();
-        String description = elements.select(".productDescription").first().text();
-        Double price = getProductPrice(elements.select(".skuBestPrice").first().text());
-        Brand brand = getProductBrand(elements.select(".brand").first().text());
-        String image = document.select(".image").select("#image").first().getElementsByAttribute("href").attr("href");
-        Integer stock = 100;
+        String name = getProductName();
+        String description = getProductDescription();
+        Double price = getProductPrice();
+        Brand brand = getProductBrand();
+        String imageUrl = getProductImageUrl();
+        Integer stock = getProductStock();
 
         Product product = Product.getBuilder()
                 .withName(name)
                 .withDescription(description)
                 .withPrice(price)
                 .withBrand(brand)
-                .withImage(image)
+                .withImageUrl(imageUrl)
                 .withStock(stock)
                 .build();
 
         return product;
     }
 
-    private static Brand getProductBrand(String brand) {
-        return new Brand(brand,"");
+    private static String getProductName() {
+        return document.select(".info-wrapper").select(".name").first().text();
     }
 
-    private static Double getProductPrice(String price) {
-        return 15.6;
+    private static String getProductDescription() {
+        return document.select(".info-wrapper").select(".productDescription").first().text();
     }
+
+    private static Double getProductPrice() {
+        String price = StringUtils.substringAfter(document.select(".info-wrapper").select(".skuBestPrice").first().text(), "S/. ");
+        return NumberUtils.isParsable(price) ? Double.parseDouble(price) : 0.0;
+    }
+
+    private static Brand getProductBrand() {
+        String brandName = document.select(".info-wrapper").select(".brand").first().text();
+        return new Brand(brandName, "");
+    }
+
+    private static String getProductImageUrl() {
+        return document.select(".image").select("#image").first().getElementsByAttribute("href").attr("href");
+    }
+
+    private static Integer getProductStock() {
+        return 100;
+    }
+
 
 }

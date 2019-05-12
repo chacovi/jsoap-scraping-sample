@@ -6,7 +6,7 @@ public class Product {
     private String description;
     private Double price;
     private Brand brand;
-    private String image;
+    private String imageUrl;
     private Integer stock;
 
     public String getName() {
@@ -41,12 +41,12 @@ public class Product {
         this.brand = brand;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Integer getStock() {
@@ -64,7 +64,7 @@ public class Product {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", brand=" + brand.getName() +
-                ", image='" + image + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", stock=" + stock +
                 '}';
     }
@@ -79,37 +79,37 @@ public class Product {
         private String description;
         private Double price;
         private Brand brand;
-        private String image;
+        private String imageUrl;
         private Integer stock;
 
         private Product product;
 
-        public ProductBuilder withName(String name){
+        public ProductBuilder withName(String name) {
             this.name = name;
             return this;
         }
 
-        public ProductBuilder withDescription(String description){
+        public ProductBuilder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public ProductBuilder withPrice(Double price){
+        public ProductBuilder withPrice(Double price) {
             this.price = price;
             return this;
         }
 
-        public ProductBuilder withBrand(Brand brand){
+        public ProductBuilder withBrand(Brand brand) {
             this.brand = brand;
             return this;
         }
 
-        public ProductBuilder withImage(String image){
-            this.image = image;
+        public ProductBuilder withImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
             return this;
         }
 
-        public ProductBuilder withStock(Integer stock){
+        public ProductBuilder withStock(Integer stock) {
             this.stock = stock;
             return this;
         }
@@ -120,7 +120,7 @@ public class Product {
             product.setDescription(this.description);
             product.setPrice(this.price);
             product.setBrand(this.brand);
-            product.setImage(this.image);
+            product.setImageUrl(this.imageUrl);
             product.setStock(this.stock);
             return this.product;
         }
