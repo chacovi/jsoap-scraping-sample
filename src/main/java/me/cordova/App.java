@@ -38,8 +38,6 @@ public class App {
         System.out.println("===================================================");
         System.out.println("========== #1 Found " + items.size() + " items ====");
         System.out.println("===================================================");
-        System.out.println(items);
-        System.out.println("===================================================");
         System.out.println("========== #2 Found details for each items ========");
         System.out.println("===================================================");
 
@@ -49,30 +47,28 @@ public class App {
 
         for (Item item : items) {
 
-            String url = item.getUrl();
-
             try {
-                document = Jsoup.connect(url).get();
+                document = Jsoup.connect(item.getUrl()).get();
             }catch (IOException ex){
                 System.out.println(ex.getMessage());
             }
 
-            System.out.println("===================================================");
             System.out.println("========== P " + i++ + " " + document.title());
             System.out.println("===================================================");
 
-            System.out.println("Product name ====================================================");
+            System.out.println("Product name ======================================");
             System.out.println(getProductName());
-            System.out.println("Product brand ===================================================");
+            System.out.println("Product brand =====================================");
             System.out.println(getProductBrand().getName());
-            System.out.println("Product description =============================================");
+            System.out.println("Product description ===============================");
             System.out.println(getProductDescription());
-            System.out.println("Product price ===================================================");
+            System.out.println("Product price =====================================");
             System.out.println(getProductPrice());
-            System.out.println("Product imageUrl ===================================================");
+            System.out.println("Product imageUrl ==================================");
             System.out.println(getProductImageUrl());
-            System.out.println("Product Stock ===================================================");
+            System.out.println("Product Stock =====================================");
             System.out.println(getProductStock());
+            System.out.println("===================================================");
 
             products.add(createProduct());
 
@@ -82,9 +78,9 @@ public class App {
         String productsJson = objectMapper.writeValueAsString(products);
 
 
-        System.out.println("===================================================");
+        System.out.println("JSON OUTPUT============================================");
         System.out.println(productsJson);
-        System.out.println("===================================================");
+        System.out.println("=======================================================");
 
     }
 
